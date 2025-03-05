@@ -1,0 +1,154 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>com.example</groupId>
+  <artifactId>api-gateway</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>jar</packaging>
+
+  <name>api-gateway</name>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <java.version>1.8</java.version>
+    <project.name>api-gateway</project.name>
+    <spring.boot.version>2.6.14</spring.boot.version> 
+    <gson.version>2.8.9</gson.version>
+    <spring.cloud.version>3.1.0</spring.cloud.version>
+    <spotify.docker.maven.version>1.4.13</spotify.docker.maven.version>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <version>${spring.boot.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>com.spotify</groupId>
+        <artifactId>dockerfile-maven-plugin</artifactId>
+        <version>${spotify.docker.maven.version}</version>
+        <configuration>
+          <repository>api-gateway</repository>
+          <resources>
+            <resource>
+              <targetPath>/</targetPath>
+              <directory>${project.build.directory}</directory>
+              <includes>
+                <include>${project.build.finalName}.jar</include>
+              </includes>
+            </resource>
+          </resources>
+        </configuration>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>build</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+      <version>${spring.boot.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-gateway</artifactId>
+      <version>${spring.cloud.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.cloud</groupId>
+      <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+      <version>${spring.cloud.version}</version>
+      <exclusions>
+        <exclusion>
+          <groupId>ch.qos.logback</groupId>
+          <artifactId>logback-classic</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-starter-logging</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>javax.servlet</groupId>
+          <artifactId>servlet-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <!-- JSON dependency -->
+    <dependency>
+    	<groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>${gson.version}</version>
+    </dependency>
+    <!-- Other dependencies -->
+    <dependency>
+	      <groupId>com.fasterxml.jackson.core</groupId>
+	      <artifactId>jackson-databind</artifactId>
+	      <version>2.14.0</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>com.fasterxml.jackson.core</groupId>
+	      <artifactId>jackson-core</artifactId>
+	      <version>2.14.0</version>
+	    </dependency>
+	    <dependency>
+	      <groupId>com.fasterxml.jackson.core</groupId>
+	      <artifactId>jackson-annotations</artifactId>
+	      <version>2.14.0</version>
+	    </dependency>
+  </dependencies>
+
+  <profiles>
+    <profile>
+      <id>API-Gateway</id>
+      <properties>
+      	<revision>2.1.0-platform</revision>
+        <spring.app.name>API-GATEWAY</spring.app.name>
+        <server.overlay.project.artifact.id>api-gateway</server.overlay.project.artifact.id>
+        <image.name>api-gateway</image.name>
+        <startup.class>com.example.APIGatewayApplication</startup.class>
+        <eureka.server.url>http://eureka:8761/eureka/</eureka.server.url>
+      </properties>
+    </profile>
+    <profile>
+		<id>HTTP</id>
+		<properties>
+			<is.server.secure>false</is.server.secure>
+			<is.server.unsecure>true</is.server.unsecure>
+			<protocol.ref>http</protocol.ref>
+			<app.port>8080</app.port>
+			<ENABLE_HTTP_START />
+			<ENABLE_HTTP_END />
+			<ENABLE_HTTPS_START>&lt;!--</ENABLE_HTTPS_START>
+			<ENABLE_HTTPS_END>--&gt;</ENABLE_HTTPS_END>
+		</properties>
+	</profile>
+  </profiles>
+  
+</project>

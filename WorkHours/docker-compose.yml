@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  app:
+    image: work-off
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:oracle:thin:@192.168.9.29:1521:DB12c
+      - SPRING_DATASOURCE_USERNAME=c##IP_PLANNING
+      - SPRING_DATASOURCE_PASSWORD=IP_PLANNING
+      - SPRING_DATASOURCE_DRIVER_CLASS_NAME=oracle.jdbc.OracleDriver
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=validate
+      - SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT=org.hibernate.dialect.Oracle12cDialect
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_FORMAT_SQL=true
+

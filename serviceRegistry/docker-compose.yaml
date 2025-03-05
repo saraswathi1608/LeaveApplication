@@ -1,0 +1,46 @@
+version: '3'
+services:
+  eureka:
+    image: eureka-server:latest
+    ports:
+      - "8761:8761"
+    networks:
+      - my-network
+
+  api-gateway:
+    image: api-gateway:latest
+    ports:
+      - "8081:8081"
+    environment:
+      - EUREKA_SERVER=http://eureka:8761/eureka/  # Use service name
+    networks:
+      - my-network
+    depends_on:
+      - eureka  # Wait for eureka to start
+      
+  workhours:
+    image: work-hours:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_SERVER=http://eureka:8761/eureka/
+      - SPRING_APPLICATION_NAME=workhours
+    networks:
+      - my-network
+    depends_on:
+      - eureka  # Wait for eureka to start
+      
+  workhours-ui-server:
+    image: work-hours-ui-server:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - SPRING_APPLICATION_NAME=workhours-ui-server
+    networks:
+      - my-network
+    depends_on:
+      - workhours  # Wait for eureka to start
+
+networks:
+  my-network:
+

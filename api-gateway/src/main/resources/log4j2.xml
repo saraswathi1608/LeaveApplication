@@ -1,0 +1,145 @@
+<!-- This XML file does not appear to have any style information associated with it. 
+The document tree is shown below. -->
+<Configuration status="WARN" name="CygNet-NG-Logging-Configuration" monitorinterval="2">
+	<Properties>
+		<!--  Log4J Property  -->
+		<Property name="Layout"> %d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%t](%F:%L) - %m%n</Property>
+		<Property name="EnableAppend">true</Property>
+		<Property name="MaxBytesForRollover">5 KB</Property>
+		<Property name="MaxFilesToKeep">3</Property>
+		<Property name="EnableAdditivity">false</Property>
+		<Property name="RootLogLevel">INFO</Property>
+		
+		<!--  Trace Property  -->
+		<Property name="TraceLogFileName">logs/trace.log</Property>
+		<Property name="TraceLogArchiveFileName">logs/_%d{yyyy-MM-dd}_trace.log.gz</Property>
+		<Property name="TraceAppenderName">TRACE-APPENDER</Property>
+		<Property name="TraceLogLevel">TRACE</Property>
+		<!--  Debug Property  -->
+		<Property name="DebugLogFileName">logs/debug.log</Property>
+		<Property name="DebugLogArchiveFileName">logs/_%d{yyyy-MM-dd}_debug.log.gz</Property>
+		<Property name="DebugAppenderName">DEBUG-APPENDER</Property>
+		<Property name="DebugLogLevel">DEBUG</Property>
+		<!--  Info Property  -->
+		<Property name="InfoLogFileName">logs/info.log</Property>
+		<Property name="InfoLogArchiveFileName">logs/_%d{yyyy-MM-dd}_info.log.gz</Property>
+		<Property name="InfoAppenderName">INFO-APPENDER</Property>
+		<Property name="InfoLogLevel">INFO</Property>
+		<!--  Error Property  -->
+		<Property name="ErrorLogFileName">logs/error.log</Property>
+		<Property name="ErrorLogArchiveFileName">logs/_%d{yyyy-MM-dd}_error.log.gz</Property>
+		<Property name="ErrorAppenderName">ERROR-APPENDER</Property>
+		<Property name="ErrorLogLevel">ERROR</Property>
+		<!--  Warn Property  -->
+		<Property name="WarnLogFileName">logs/warn.log</Property>
+		<Property name="WarnLogArchiveFileName">logs/_%d{yyyy-MM-dd}_warn.log.gz</Property>
+		<Property name="WarnAppenderName">WARN-APPENDER</Property>
+		<Property name="WarnLogLevel">WARN</Property>
+		<!--  CLA Logger  -->
+		<Property name="APIGLogFileName">logs/api-gateway.log</Property>
+		<Property name="APIGLogArchiveFileName">logs/_%d{yyyy-MM-dd}_api-gateway.log.gz</Property>
+		<Property name="APIGAppenderName">APIG-APPENDER</Property>
+		<Property name="APIGLogLevel">INFO</Property>	
+
+		</Properties>
+		<!--  APPENDER Configurations -->
+		<Appenders>
+			<!--  CygNet-NG Rolling File Appender
+		 
+		append = {false} Log events will not be appended to the end of the file. 
+		bufferedIO = {true} - Buffers the log events before flushing into file. 
+		bufferSize = {8192} bytes (default). 
+		fileName = Name of the file to which log events has to be redirected. 
+		filePattern = The pattern of the file name of the archived log file. 
+		immediateFlush = {false} - Flushes once buffer size gets reached. 
+		name = Name of the appender to get referred
+		 
+		 -->
+		 
+		 	<!-- Console Appender Definition -->
+       	 	<Console name="Console" target="SYSTEM_OUT">
+            	<PatternLayout pattern="${Layout}"/>
+        	</Console>
+        
+			<!--  Trace Rolling File Appender  -->
+			<RollingFile append="${EnableAppend}" fileName="${TraceLogFileName}" filePattern="${TraceLogArchiveFileName}" name="${TraceAppenderName}">
+				<LevelRangeFilter minLevel="TRACE" maxLevel="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
+				<!--  Log Layout  -->
+				<PatternLayout pattern="${Layout}"/>
+				<!--  Roll over and trigger Policy  -->
+				<Policies>
+					<TimeBasedTriggeringPolicy interval="1"/>
+				</Policies>
+			</RollingFile>
+			<!--  Debug Rolling File Appender  -->
+			<RollingFile append="${EnableAppend}" fileName="${DebugLogFileName}" filePattern="${DebugLogArchiveFileName}" name="${DebugAppenderName}">
+				<LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+				<!--  Log Layout  -->
+				<PatternLayout pattern="${Layout}"/>
+				<!--  Roll over and trigger Policy  -->
+				<Policies>
+					<TimeBasedTriggeringPolicy interval="1"/>
+				</Policies>
+			</RollingFile>
+			<!--  Info Rolling File Appender  -->
+			<RollingFile append="${EnableAppend}" fileName="${InfoLogFileName}" filePattern="${InfoLogArchiveFileName}" name="${InfoAppenderName}">
+				<LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
+				<!--  Log Layout  -->
+				<PatternLayout pattern="${Layout}"/>
+				<!--  Roll over and trigger Policy  -->
+				<Policies>
+					<TimeBasedTriggeringPolicy interval="1"/>
+				</Policies>
+			</RollingFile>
+			<!--  Error Rolling File Appender  -->
+			<RollingFile append="${EnableAppend}" fileName="${ErrorLogFileName}" filePattern="${ErrorLogArchiveFileName}" name="${ErrorAppenderName}">
+				<LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+				<!--  Log Layout  -->
+				<PatternLayout pattern="${Layout}"/>
+				<!--  Roll over and trigger Policy  -->
+				<Policies>
+					<TimeBasedTriggeringPolicy interval="1"/>
+				</Policies>
+			</RollingFile>
+			<!--  Warn Rolling File Appender  -->
+			<RollingFile append="${EnableAppend}" fileName="${WarnLogFileName}" filePattern="${WarnLogArchiveFileName}" name="${WarnAppenderName}">
+				<LevelRangeFilter minLevel="WARN" maxLevel="WARN" onMatch="ACCEPT" onMismatch="DENY"/>
+				<!--  Log Layout  -->
+				<PatternLayout pattern="${Layout}"/>
+				<!--  Roll over and trigger Policy  -->
+				<Policies>
+					<TimeBasedTriggeringPolicy interval="1"/>
+				</Policies>
+			</RollingFile>
+			
+			
+            		<!--  CLA Rolling File Appender  -->
+			<RollingFile append="${EnableAppend}" fileName="${APIGLogFileName}" filePattern="${APIGLogArchiveFileName}" name="${APIGAppenderName}">
+				<!--  Log Layout  -->
+				<PatternLayout pattern="${Layout}"/>
+				<!--  Roll over and trigger Policy  -->
+				<Policies>
+					<TimeBasedTriggeringPolicy interval="1"/>
+				</Policies>
+			</RollingFile>
+
+		</Appenders>
+		<!--  CygNet NG LOG CONFIG  -->
+		<Loggers>
+			<!--  APIGateway Logger  -->
+			<Logger name="api-gateway" level="${AGPGLogLevel}" additivity="${EnableAdditivity}">
+				<AppenderRef ref="${APIGAppenderName}"/>
+				<AppenderRef ref="${ErrorAppenderName}" level="ERROR"/>
+			</Logger>
+			
+			<!--  ROOT Logger  -->
+			<Root level="${RootLogLevel}">
+    			<AppenderRef ref="Console"/>
+    			<AppenderRef ref="${InfoAppenderName}"/>
+    			<AppenderRef ref="${ErrorAppenderName}" level="ERROR"/>
+			</Root>
+			
+			
+		</Loggers>
+		
+</Configuration>
